@@ -11,55 +11,55 @@ let btn = document.getElementById('deleteALL');
 let mood = 'create';
 let tmp;
 
-function getTotal(){
-    if( price.value != ''){
+function getTotal() {
+    if (price.value != '') {
 
-        let totalePrice = (+price.value + +taxes.value + +ads.value ) - discount.value ;
-        total.innerHTML = totalePrice ;
+        let totalePrice = (+price.value + +taxes.value + +ads.value) - discount.value;
+        total.innerHTML = totalePrice;
         total.style.backgroundColor = '#009f0b'
-    }else{
+    } else {
         total.innerHTML = '';
         total.style.backgroundColor = '#a10505';
     }
 }
 //---------------------------
 let dataPro;
-if(localStorage.prodact != null){
+if (localStorage.prodact != null) {
     dataPro = JSON.parse(localStorage.prodact);
-}else{
+} else {
     dataPro = []
 }
 
-create.onclick = function(){
-    let newPro ={
-        title:title.value.toLowerCase(),
-        price:price.value,
-        taxes:taxes.value,
-        ads:ads.value,
-        discount:discount.value,
-        total:total.innerHTML,
-        category:category.value.toLowerCase(),
-        count:count.value,
+create.onclick = function () {
+    let newPro = {
+        title: title.value.toLowerCase(),
+        price: price.value,
+        taxes: taxes.value,
+        ads: ads.value,
+        discount: discount.value,
+        total: total.innerHTML,
+        category: category.value.toLowerCase(),
+        count: count.value,
     }
-    if( mood == 'create'){
-        if(newPro.count > 1){
-             for(let i = 0 ; i < newPro.count ; i++ ){
+    if (mood == 'create') {
+        if (newPro.count > 1) {
+            for (let i = 0; i < newPro.count; i++) {
                 dataPro.push(newPro);
-             }
-        }else{
-        dataPro.push(newPro);
+            }
+        } else {
+            dataPro.push(newPro);
         }
-    
+
         localStorage.setItem('prodact', JSON.stringify(dataPro));
-    }else{
-       dataPro[tmp] = newPro;
+    } else {
+        dataPro[tmp] = newPro;
     }
 
     clearData();
     showData();
 }
 //---------------------------
-function clearData(){
+function clearData() {
     title.value = '';
     price.value = '';
     taxes.value = '';
@@ -71,9 +71,9 @@ function clearData(){
     count.value = '';
 }
 //---------------------------
-function showData(){ 
-    let table = '' ;
-    for(let i = 0 ; i < dataPro.length ; i++){
+function showData() {
+    let table = '';
+    for (let i = 0; i < dataPro.length; i++) {
         table += ` <tr>
         <td>${i}</td>
         <td>${dataPro[i].title}</td>
@@ -88,34 +88,34 @@ function showData(){
     </tr> `
     }
     document.getElementById('tbody').innerHTML = table;
-    
-    if( dataPro.length > 0){
+
+    if (dataPro.length > 0) {
         btn.innerHTML = ` <button onclick="deleteALL()">DELETE ALL (${dataPro.length})</button> `
-    }else{
+    } else {
         btn.innerHTML = '';
     }
 }
 showData()
 //---------------------------
-function deleteData(i){
-    dataPro.splice(i,1);
+function deleteData(i) {
+    dataPro.splice(i, 1);
     localStorage.prodact = JSON.stringify(dataPro);
     showData();
 }
 //---------------------------
-function deleteALL(){
+function deleteALL() {
     localStorage.clear();
     dataPro.splice(0);
     showData();
 }
 //---------------------------
-function updateData(i){
+function updateData(i) {
     title.value = dataPro[i].title;
     price.value = dataPro[i].price;
     taxes.value = dataPro[i].taxes;
     ads.value = dataPro[i].ads;
     discount.value = dataPro[i].discount;
-    count.style.display = 'none'; 
+    count.style.display = 'none';
     getTotal();
     category.value = dataPro[i].category;
     create.innerHTML = 'Updete';
@@ -123,19 +123,19 @@ function updateData(i){
     mood = 'update';
     tmp = i;
     scroll({
-        top:0,
-        behavior:'smooth'
+        top: 0,
+        behavior: 'smooth'
     })
 }
 //search ----------------------------------------------------
 let searchMood = 'title';
-function getsearchMood(id){
+function getsearchMood(id) {
     let search = document.getElementById("search");
-    if(id == 'searchByTitle'){
+    if (id == 'searchByTitle') {
         searchMood = 'title';
         search.placeholder = 'search by title';
 
-    }else{
+    } else {
         searchMood = 'category';
         search.placeholder = 'search by category';
     }
@@ -143,12 +143,12 @@ function getsearchMood(id){
     search.value = '';
     // showData();
 }
-function searchData(value){
+function searchData(value) {
     let table = '';
-    if(searchMood == 'title'){
-       for(let i = 0 ; i < dataPro.length -1 ; i++ ){
-        if(dataPro[i].title.includes(value)){
-            console.log(i);
+    if (searchMood == 'title') {
+        for (let i = 0; i < dataPro.length - 1; i++) {
+            if (dataPro[i].title.includes(value)) {
+                console.log(i);
                 table += ` <tr>
             <td>${i}</td>
             <td>${dataPro[i].title}</td>
@@ -161,12 +161,12 @@ function searchData(value){
             <td><button id="update" onclick="updateData(${i})">update</button></td>
             <td><button id="delete" onclick="deleteData(${i})">delete</button></td>
             </tr> `
-        }
+            }
         }
     }
-    else{
-        for(let i = 0 ; i < dataPro.length ; i++ ){
-            if(dataPro[i].category.includes(value)){
+    else {
+        for (let i = 0; i < dataPro.length; i++) {
+            if (dataPro[i].category.includes(value)) {
                 console.log(i);
                 table += ` <tr>
                 <td>${i}</td>
@@ -181,7 +181,7 @@ function searchData(value){
                 <td><button id="delete" onclick="deleteData(${i})">delete</button></td>
                 </tr> `
             }
-    }
+        }
     }
     document.getElementById('tbody').innerHTML = table;
 }
